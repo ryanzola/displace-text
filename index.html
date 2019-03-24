@@ -6,10 +6,79 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
   <link rel="stylesheet" href="style.scss">
-  <title>Parcel Boilerplate</title>
+  <title>Displace Text</title>
 </head>
 <body>
-  <img id="canvas" class="logo" src="https://parceljs.org/assets/logo.svg" alt="logo">
-  <script src="index.js"></script>
+  <svg 
+    id="canvas"
+    version="1.1" 
+    width="600px" height="330px" viewBox="0 0 600 330"
+    xmlns="http://www.w3.org/2000/svg" 
+    xmlns:xlink="http://www.w3.org/1999/xlink">
+    <defs>
+
+      <filter id="conform" x="-50%" y="-50%" width="200%" height="200%" > 
+        <feImage 
+          xlink:href="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1116884/towel.png" 
+          x="0" y="0" 
+          height="100%" width="100%" 
+          preserveAspectRatio="none">
+        </feImage>
+
+        <feColorMatrix
+          type="saturate"
+          values="0"
+          result="image"/>
+
+        <feGaussianBlur 
+          in="image" 
+          result="map">
+        </feGaussianBlur>
+
+        <feDisplacementMap
+          in="SourceGraphic" 
+          in2="map"
+          scale="15" 
+          xChannelSelector="R" 
+          yChannelSelector="R"
+          result="textured">
+        </feDisplacementMap>
+
+        <feColorMatrix
+          in="textured" result="textured_2"
+          type="matrix" 
+          values="1 0 0 0 0
+          0 1 0 0 0
+          0 0 1 0 0
+          0 0 0 .9 0" />
+
+        <feImage xlink:href="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1116884/towel.png" x="0" y="0" height="100%" width="100%" preserveAspectRatio="none" result="bg"/>
+
+         <feComponentTransfer in="bg" result="bg2">
+          <feFuncR type="gamma" amplitude="1.5" exponent="1.5">
+          </feFuncR>
+          <feFuncG type="gamma" amplitude="1.5" exponent="1.5">
+          </feFuncG>
+          <feFuncB type="gamma" amplitude="1.5" exponent="1.5">
+          </feFuncB>
+        </feComponentTransfer>
+
+        <feBlend in="bg2" in2="textured_2" mode="multiply" result="blended-text" />
+
+        <feMerge>
+          <feMergeNode in="bg2" />
+          <feMergeNode in="blended-text" />
+        </feMerge>
+      </filter>
+    </defs>
+
+    <g filter="url(#conform)">
+      <text dx="50" dy="200" font-size="9em" font-weight="bold" fill="#00826C" transform="translate(-20 28) rotate(-5)">
+        Displace
+      </text>
+    </g>
+
+  </svg>
+  <script src="index.ts"></script>
 </body>
 </html>
